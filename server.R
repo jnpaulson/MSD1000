@@ -180,13 +180,27 @@ shinyServer(function(input, output) {
     data.frame(Index, fData(gates)[Index,-c(2,10)])
   })
   output$cluster_sequence<-renderText({
-        if(input$otu == TRUE){
+    if(input$otu == TRUE){
       Index = input$feature
     } else{
       k = which(input$feature == fData(gates)[,1])
       Index = k
     }
     as.character(fData(gates)[Index,10])
+  })
+
+  output$cluster_sequences<-renderText({
+      if(input$level == 'genus'){
+        inputFeature=input$genus
+      } else if (input$level == 'species'){
+        inputFeature=input$species
+      } else if (input$level == 'class'){
+        inputFeature=input$class
+      } else if (input$level == 'phylum'){
+        inputFeature=input$phylum
+      }
+    k = which(fData(gates)[,input$level]==inputFeature)
+    paste(as.character(fData(gates)[k,10]),collapse="\n\n")
   })
 
   output$otulist<- renderDataTable({

@@ -18,8 +18,14 @@ if(!require("metagenomeSeq")){
 load("forserveroptim.rdata")
      shinyUI(navbarPage("MSD 1000",
       header = tags$h4(paste0(
-                "Hosted by:"
-                ),tags$a(tags$img(src="logo.png"),href="http://epiviz.cbcb.umd.edu"),p(),tags$h6("Data comes from the ",tags$a("molecular characterization of the diarrheal microbiome in young children from low-income countries",href="http://www.cbcb.umd.edu/research/projects/GEMS-pathogen-discovery"))),footer=tags$small(tags$a("Visualization code",href="https://github.com/nosson/MSD1000")," by ",tags$a("Joseph N. Paulson",href="http://www.cbcb.umd.edu/~jpaulson")),
+                "Hosted by:"),
+        tags$a(tags$img(src="logo.png"),href="http://epiviz.cbcb.umd.edu"),
+        p(),
+        tags$h6("Data comes from the ",
+          tags$a("molecular characterization of the diarrheal microbiome in young children from low-income countries",
+          href="http://www.cbcb.umd.edu/research/projects/GEMS-pathogen-discovery"))),
+      footer=tags$small(tags$a("Visualization code",href="https://github.com/nosson/MSD1000")
+        ),#," by ",tags$a("Joseph N. Paulson",href="http://www.cbcb.umd.edu/~jpaulson")),
 	tabPanel("Feature Abundance plots",
         sidebarLayout(
           sidebarPanel(
@@ -64,13 +70,19 @@ load("forserveroptim.rdata")
                         "Age" = "AgeFactor",
                         "Health" = "Type", "None" = "none"),
                         selected = c("Type","AgeFactor")),
-            br()
+            br(),
+            conditionalPanel(condition = "input.level != 'OTU'",
+              tags$small("*OTU sequence centers for OTUs present in > 20 samples")
+              )
           ),
           mainPanel(
             plotOutput("plot"),
             conditionalPanel(condition = "input.level == 'OTU'",
               tableOutput("table"),
-              pre(textOutput("cluster_sequence"))
+              pre("OTU sequence center:",textOutput("cluster_sequence"))
+            ),
+            conditionalPanel(condition = "input.level != 'OTU'",
+              pre("*OTU sequence centers:",textOutput("cluster_sequences"))
             )
           )
       )
