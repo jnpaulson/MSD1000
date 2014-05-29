@@ -19,7 +19,7 @@ load("forserveroptim.rdata")
      shinyUI(navbarPage("MSD 1000",
       header = tags$h4(paste0(
                 "Hosted by:"
-                ),tags$a(tags$img(src="logo.png"),href="http://epiviz.cbcb.umd.edu"),p(),tags$h6("Data comes from the ",tags$a("molecular characterization of the diarrheal microbiome in young children from low-income countries",href="http://www.cbcb.umd.edu/research/projects/GEMS-pathogen-discovery"))),footer=tags$small("Visualization by ",tags$a("Joseph N. Paulson",href="http://www.cbcb.umd.edu/~jpaulson")),
+                ),tags$a(tags$img(src="logo.png"),href="http://epiviz.cbcb.umd.edu"),p(),tags$h6("Data comes from the ",tags$a("molecular characterization of the diarrheal microbiome in young children from low-income countries",href="http://www.cbcb.umd.edu/research/projects/GEMS-pathogen-discovery"))),footer=tags$small(tags$a("Visualization code",href="https://github.com/nosson/MSD1000")," by ",tags$a("Joseph N. Paulson",href="http://www.cbcb.umd.edu/~jpaulson")),
 	tabPanel("Feature Abundance plots",
         sidebarLayout(
           sidebarPanel(
