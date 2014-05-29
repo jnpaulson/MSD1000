@@ -1,3 +1,20 @@
+download_not_installed<-function(x){
+    for(i in x){
+	if(!require(i,character.only=TRUE)){
+	 install.packages(i,repos="http://cran.r-project.org")
+  	 library(i,character.only=TRUE)
+  	}
+    }
+}
+required_packages = c("shiny")
+download_not_installed(required_packages)
+
+if(!require("metagneomeSeq")){
+	source("http://bioconductor.org/biocLite.R")
+	biocLite("metagenomeSeq")
+	library("metagenomeSeq")
+}
+
 mypar<-function(a=1,b=1,brewer.n=8,brewer.name="Dark2",...){
   par(mar=c(3.0,2.5,1.6,1.1),mgp=c(1.5,.5,0))
   par(mfrow=c(a,b),...)
@@ -5,8 +22,6 @@ mypar<-function(a=1,b=1,brewer.n=8,brewer.name="Dark2",...){
 }
 
 load("forserveroptim.rdata")
-library("metagenomeSeq")
-library("shiny")
 
 status = factor(pData(gates)$Type)
 country = factor(pData(gates)$Country)

@@ -1,4 +1,20 @@
-library(shiny)
+download_not_installed<-function(x){    
+    for(i in x){
+        if(!require(i,character.only=TRUE)){
+         install.packages(i,repos="http://cran.r-project.org")
+         library(i,character.only=TRUE)
+        }       
+    }   
+}
+required_packages = c("shiny")
+download_not_installed(required_packages)
+
+if(!require("metagneomeSeq")){
+        source("http://bioconductor.org/biocLite.R")
+        biocLite("metagenomeSeq")
+        library("metagenomeSeq")
+}
+
 load("forserveroptim.rdata")
      shinyUI(navbarPage("MSD 1000",
       tabPanel("Feature Abundance plots",
