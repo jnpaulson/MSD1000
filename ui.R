@@ -69,7 +69,8 @@ load("forserveroptim.rdata")
           mainPanel(
             plotOutput("plot"),
             conditionalPanel(condition = "input.level == 'OTU'",
-              tableOutput("table")
+              tableOutput("table"),
+              pre(textOutput("cluster_sequence"))
             )
           )
       )

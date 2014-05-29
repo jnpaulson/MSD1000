@@ -177,11 +177,20 @@ shinyServer(function(input, output) {
       k = which(input$feature == fData(gates)[,1])
       Index = k
     }
-    data.frame(Index, fData(gates)[Index,-2])
+    data.frame(Index, fData(gates)[Index,-c(2,10)])
+  })
+  output$cluster_sequence<-renderText({
+        if(input$otu == TRUE){
+      Index = input$feature
+    } else{
+      k = which(input$feature == fData(gates)[,1])
+      Index = k
+    }
+    as.character(fData(gates)[Index,10])
   })
 
   output$otulist<- renderDataTable({
-        as.matrix(fData(gates)[,-c(2,10)])
+        as.matrix(fData(gates)[,-c(2)])
     })
 
   
