@@ -6,7 +6,7 @@ download_not_installed<-function(x){
   	}
     }
 }
-required_packages = c("shiny")
+required_packages = c("shiny","vegan")
 download_not_installed(required_packages)
 
 if(!require("metagenomeSeq")){
@@ -129,6 +129,16 @@ shinyServer(function(input, output) {
       classIndex = clIndex,col=coll,font.lab=2,font.axis=2)
   })
 
+  output$pcaPlot <- renderPlot({
+    useDist = input$useDist
+    pd = pData(gates)[,input$pcaColor]
+    if(input$pcaColor=="Type" | input$pcaColor=="Dysentery") pd = factor(pd)
+    if(input$pca_or_mds=="FALSE") useDist = TRUE
+    plotOrd(nmat,pch=21,bg=pd,usePCA=input$pca_or_mds,
+      useDist=useDist,distfun=vegan::vegdist,dist.method=input$distance)
+    legend("bottomleft",levels(pd),fill=factor(levels(pd)),box.col="NA")
+  })
+
   output$diversity <- renderPlot({
     pd = pData(gates)[,input$comp]
     boxplot(H~interaction(pd))
@@ -170,27 +180,7 @@ shinyServer(function(input, output) {
     data.frame(Index, fData(gates)[Index,-2])
   })
 
-  # myOptions <- reactive({
-  #   list(
-  #     page=ifelse(input$pageable==TRUE,'enable','disable'),
-  #     pageSize=input$pagesize,
-  #     width=550
-  #   )
-  # })
-  #myOptions = list(width=1500)
   output$otulist<- renderDataTable({
-      # if(input$level == 'genus'){
-      #   inputFeature=input$genus
-      # } else if (input$level == 'species'){
-      #   inputFeature=input$species
-      # } else if (input$level == 'class') {
-      #   inputFeature=input$class
-      # } else if (input$level == 'phylum') {
-      #   inputFeature=input$phylum
-      # }
-      # k = which(fData(gates)[,input$level] == inputFeature)
-      # data.frame(fData(gates)[k,1])
-      # gvisTable(fData(gates)[,-c(2,10)],options=myOptions)
         as.matrix(fData(gates)[,-c(2,10)])
     })
 

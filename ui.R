@@ -6,7 +6,7 @@ download_not_installed<-function(x){
         }       
     }   
 }
-required_packages = c("shiny")
+required_packages = c("shiny","vegan")
 download_not_installed(required_packages)
 
 if(!require("metagenomeSeq")){
@@ -71,6 +71,30 @@ load("forserveroptim.rdata")
             conditionalPanel(condition = "input.level == 'OTU'",
               tableOutput("table")
             )
+          )
+      )
+    ),
+  tabPanel("PCA",
+        sidebarLayout(
+          sidebarPanel(
+            radioButtons("pca_or_mds","PCA/MDS",c("PCA"="TRUE","MDS"="FALSE")),
+            radioButtons("useDist","Count distances",c("False"="FALSE","True"="TRUE")),
+              conditionalPanel(condition = "input.useDist == 'TRUE'",
+                selectInput("distance", "Distance:", 
+                    choices=c("euclidean","manhattan","canberra","bray",
+                      "kulczynski","jaccard","gower","altGower","morisita",
+                      "horn","mountford","raup","binomial","chao","cao"))
+              ),
+            radioButtons("pcaColor","Colored by:",c(
+                        "Country" = "Country",
+                        "Age" = "AgeFactor",
+                        "Health" = "Type",
+                        "Dysentery"="Dysentery"),
+                        selected = c("Country"))#,
+            # br()
+          ),
+          mainPanel(
+            plotOutput("pcaPlot")
           )
       )
     ),
