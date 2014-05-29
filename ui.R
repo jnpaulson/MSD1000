@@ -9,7 +9,7 @@ download_not_installed<-function(x){
 required_packages = c("shiny")
 download_not_installed(required_packages)
 
-if(!require("metagneomeSeq")){
+if(!require("metagenomeSeq")){
         source("http://bioconductor.org/biocLite.R")
         biocLite("metagenomeSeq")
         library("metagenomeSeq")
@@ -81,27 +81,10 @@ load("forserveroptim.rdata")
     ,
     navbarMenu("More",
       tabPanel("OTU descriptions",
-        # sidebarLayout(
-        #     sidebarPanel(
-        #       checkboxInput(inputId = "pageable", label = "Pageable"),
-        #       conditionalPanel("input.pageable==true",
-        #         numericInput(inputId = "pagesize",
-        #                       label = "OTUs per page",10))    
-              # ),
             mainPanel(
                 dataTableOutput("otulist")
              )
           )
-          # sidebarLayout(
-          #   sidebarPanel(
-          #     checkboxInput(inputId = "pageable", label = "Pageable",TRUE),
-          #     conditionalPanel("input.pageable==true",
-          #      numericInput(inputId = "pagesize",
-          #                 label = "OTUs per page",10))    
-          #     ),
-          #   mainPanel(
-          #     tableOutput("otulist")
-          # )
          )
        )
-    )
+)

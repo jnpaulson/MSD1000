@@ -9,7 +9,7 @@ download_not_installed<-function(x){
 required_packages = c("shiny")
 download_not_installed(required_packages)
 
-if(!require("metagneomeSeq")){
+if(!require("metagenomeSeq")){
 	source("http://bioconductor.org/biocLite.R")
 	biocLite("metagenomeSeq")
 	library("metagenomeSeq")
