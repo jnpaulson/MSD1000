@@ -103,7 +103,9 @@ load("forserveroptim.rdata")
                         "Age" = "AgeFactor",
                         "Health" = "Type",
                         "Dysentery"="Dysentery"),
-                        selected = c("Country"))#,
+                        selected = c("Country")),
+            br(),
+            tags$small("warning: takes a few seconds")
             # br()
           ),
           mainPanel(
