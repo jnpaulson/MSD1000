@@ -16,16 +16,17 @@ if(!require("metagenomeSeq")){
 }
 
 load("forserveroptim.rdata")
-     shinyUI(navbarPage("MSD 1000",
-      header = tags$h3(paste0(
-                "Hosted by:"),
-        tags$a(tags$img(src="logo.png"),href="http://epiviz.cbcb.umd.edu"),
-        p(),
-        tags$h6("Data comes from the ",
-          tags$a("molecular characterization of the diarrheal microbiome in young children from low-income countries",
-          href="http://www.cbcb.umd.edu/research/projects/GEMS-pathogen-discovery"))),
-      footer=tags$small(tags$a("Visualization code",href="https://github.com/nosson/MSD1000")
-        ),#," by ",tags$a("Joseph N. Paulson",href="http://www.cbcb.umd.edu/~jpaulson")),
+
+headerInfo = tags$h3("Hosted by:",tags$a(tags$img(src="logo.png"),href="http://epiviz.cbcb.umd.edu"),
+                p(),tags$h6("Data comes from the ",
+                  tags$a("molecular characterization of the diarrheal microbiome in young children from low-income countries",
+                    href="http://www.cbcb.umd.edu/research/projects/GEMS-pathogen-discovery")))
+footerInfo = tags$small(tags$a("Visualization code",href="https://github.com/nosson/MSD1000"))
+#," by ",tags$a("Joseph N. Paulson",href="http://www.cbcb.umd.edu/~jpaulson")),
+
+shinyUI(navbarPage("MSD 1000",
+  header = headerInfo,
+  footer = footerInfo,
 	tabPanel("Feature Abundance plots",
         sidebarLayout(
           sidebarPanel(
@@ -106,7 +107,6 @@ load("forserveroptim.rdata")
                         selected = c("Country")),
             br(),
             tags$small("warning: takes a few seconds")
-            # br()
           ),
           mainPanel(
             plotOutput("pcaPlot")
