@@ -133,7 +133,6 @@ shinyServer(function(input, output) {
   })
 
   output$diversityTable <- renderTable({
-
     pd = interaction(pData(gates)[,input$comp])
     nc = length(unique(pd))
 
@@ -165,7 +164,7 @@ shinyServer(function(input, output) {
       k = which(input$feature == fData(gates)[,1])
       Index = k
     }
-    data.frame(Index, fData(gates)[Index,-c(2,10)])
+    data.frame(Index, fData(gates)[Index,-c(2,3,10)])
   })
   output$cluster_sequence<-renderText({
     if(input$otu == TRUE){
@@ -192,7 +191,7 @@ shinyServer(function(input, output) {
   })
 
   output$otulist<- renderDataTable({
-        as.matrix(fData(gates)[,-c(2)])
+        as.matrix(fData(gates)[,-c(2,3)])
     })
 
   

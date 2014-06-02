@@ -35,7 +35,7 @@ load("forserveroptim.rdata")
                         "Genus" = "genus","Species"="species","OTU"="OTU"),
                         selected = c("OTU")),
               conditionalPanel(condition = "input.level == 'OTU'",
-                numericInput('feature', 'OTU:', 1, min = 1, max = 197358),
+                numericInput('feature', 'OTU:', 1, min = 1, max = 197358,value=3712),
                 checkboxInput("otu","Index",TRUE)
               ),
               conditionalPanel(condition = "input.level == 'species'",
