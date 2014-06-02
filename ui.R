@@ -17,7 +17,7 @@ if(!require("metagenomeSeq")){
 
 load("forserveroptim.rdata")
      shinyUI(navbarPage("MSD 1000",
-      header = tags$h4(paste0(
+      header = tags$h3(paste0(
                 "Hosted by:"),
         tags$a(tags$img(src="logo.png"),href="http://epiviz.cbcb.umd.edu"),
         p(),

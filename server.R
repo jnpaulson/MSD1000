@@ -64,19 +64,6 @@ shinyServer(function(input, output) {
       coll = pData(subset)[,"Type"]
     }
 
-    if(input$norm == TRUE){
-      mat = nmat[,samplesToInclude]
-    } else {
-      mat = MRcounts(subset)
-    }
-
-    if(input$otu == TRUE){
-      inputFeature = input$feature    
-    } else{
-      k = which(input$feature == fData(gates)[,1])
-      inputFeature = k
-    }
-
     if(input$level!="OTU"){
       if(input$level == 'genus'){
         inputFeature=input$genus
@@ -110,7 +97,7 @@ shinyServer(function(input, output) {
       main   = rownames(mat)[inputFeature]
     } else {
       if(input$norm == TRUE){
-         mat = nmat[,samplesToInclude]
+        mat = nmat[,samplesToInclude]
       } else {
         mat = MRcounts(subset)
       }
@@ -121,12 +108,13 @@ shinyServer(function(input, output) {
         k = which(input$feature == fData(gates)[,1])
         inputFeature = k
       }
-      main=os[inputFeature]
+      main   = os[inputFeature]
     }
       
     mypar(dim1,dim2)
     plotFeature(mat,otuIndex = inputFeature,ylab="Abundance",main=main,
       classIndex = clIndex,col=coll,font.lab=2,font.axis=2)
+    legend("topleft",legend=unique(coll),fill=unique(coll),box.col="NA")
   })
 
   output$pcaPlot <- renderPlot({
