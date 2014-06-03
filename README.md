@@ -12,4 +12,4 @@ runGitHub("MSD1000", "nosson")
 ```
 For more information please visit: http://cbcb.umd.edu/research/projects/GEMS-pathogen-discovery
 
-Graciously hosted on [Epiviz]('http://epiviz.cbcb.umd.edu/shiny/MSD1000/')!
+Graciously hosted on [Epiviz]("http://epiviz.cbcb.umd.edu/shiny/MSD1000/") at http://epiviz.cbcb.umd.edu/shiny/MSD1000/.
