@@ -193,6 +193,5 @@ shinyServer(function(input, output) {
   output$otulist<- renderDataTable({
         as.matrix(fData(gates)[,-c(2,3)])
     })
-
   
 })

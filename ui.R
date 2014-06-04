@@ -125,6 +125,13 @@ shinyUI(navbarPage("MSD 1000",
             mainPanel(
                 dataTableOutput("otulist")
              )
+          ),
+      tabPanel("About",
+        tags$h6(
+    "Diarrhea is a major cause of mortality and morbidity in young children from developing countries, leading to as many as 15% of all deaths in children under 5 years of age. While many causes of this disease are already known, conventional diagnostic approaches fail to detect a pathogen in up to 60% of diarrheal cases. Our study is part of the larger Global Enterics Multi-center study (GEMS) and aims to characterize the diarrheal microbiome in order to both evaluate the effectiveness of modern diagnostics based on molecular techniques, and to discover potentially new pathogens.",p(),
+    "Among the discoveries of our study are the effectiveness of quantitative PCR as an alternative to culture in characterizing Shigella infections, as well as the potential of members of the Streptococcus genus to cause diarrhea. Streptococci were found in our study to be statistically associated with diarrheal disease in general and more severe forms (such as dysentery) in particular.",p(),
+    "Data was filtered (for server speed) at each level to include only features present in over 20 samples. Additionally, only OTU sequences present in over 20 samples are shown."
+),p(),tags$small(tags$a("Visualization code",href="https://github.com/nosson/MSD1000")," by ",tags$a("Joseph N. Paulson",href="http://www.cbcb.umd.edu/~jpaulson")),p(),p()
           )
          )
 	)
