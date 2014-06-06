@@ -118,11 +118,19 @@ shinyServer(function(input, output) {
   })
 
   output$pcaPlot <- renderPlot({
+
+    if(input$pcaSamples!="Both"){
+      samplesToInclude = which(status%in%input$pcaSamples)
+      subset = gates[,samplesToInclude]
+    } else {
+      samplesToInclude = 1:ncol(nmat)
+      subset = gates
+    }
     useDist = input$useDist
-    pd = pData(gates)[,input$pcaColor]
+    pd = pData(subset)[,input$pcaColor]
     if(input$pcaColor=="Type" | input$pcaColor=="Dysentery") pd = factor(pd)
-    if(input$pca_or_mds=="FALSE") useDist = TRUE
-    plotOrd(nmat,pch=21,bg=pd,usePCA=input$pca_or_mds,
+    # if(input$pcaOrMds=="FALSE") useDist = TRUE
+    plotOrd(nmat[,samplesToInclude],n=200,pch=21,bg=pd,usePCA=input$pcaOrMds,
       useDist=useDist,distfun=vegan::vegdist,dist.method=input$distance)
     legend("bottomleft",levels(pd),fill=factor(levels(pd)),box.col="NA")
   })

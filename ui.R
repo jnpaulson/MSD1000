@@ -91,8 +91,9 @@ shinyUI(navbarPage("MSD 1000",
   tabPanel("PCA",
         sidebarLayout(
           sidebarPanel(
-            radioButtons("pca_or_mds","PCA/MDS",c("PCA"="TRUE","MDS"="FALSE")),
-            radioButtons("useDist","Count distances",c("False"="FALSE","True"="TRUE")),
+            radioButtons("pcaSamples","Samples to use:",c("Both"="Both","Cases"="Case","Controls"="Control")),
+            radioButtons("pcaOrMds","PCA or MDS:",c("PCA"="TRUE","MDS"="FALSE")),
+            radioButtons("useDist","Count distances:",c("False"="FALSE","True"="TRUE")),
               conditionalPanel(condition = "input.useDist == 'TRUE'",
                 selectInput("distance", "Distance:", 
                     choices=c("euclidean","manhattan","canberra","bray",
@@ -106,7 +107,7 @@ shinyUI(navbarPage("MSD 1000",
                         "Dysentery"="Dysentery"),
                         selected = c("Country")),
             br(),
-            tags$small("warning: takes a few seconds")
+            tags$small("Warning: takes a few seconds")
           ),
           mainPanel(
             plotOutput("pcaPlot")
