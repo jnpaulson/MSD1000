@@ -1,4 +1,4 @@
-download_not_installed<-function(x){
+downloadNotInstalled<-function(x){
     for(i in x){
 	if(!require(i,character.only=TRUE)){
 	 install.packages(i,repos="http://cran.r-project.org")
@@ -6,8 +6,8 @@ download_not_installed<-function(x){
   	}
     }
 }
-required_packages = c("shiny","vegan")
-download_not_installed(required_packages)
+requiredPackages = c("shiny","vegan")
+downloadNotInstalled(requiredPackages)
 
 if(!require("metagenomeSeq")){
 	source("http://bioconductor.org/biocLite.R")
@@ -174,17 +174,19 @@ shinyServer(function(input, output) {
     }
     data.frame(Index, fData(gates)[Index,-c(2,3,10)])
   })
-  output$cluster_sequence<-renderText({
+  output$clusterSequence<-renderText({
     if(input$otu == TRUE){
       Index = input$feature
     } else{
       k = which(input$feature == fData(gates)[,1])
       Index = k
     }
-    as.character(fData(gates)[Index,10])
+    otuid = paste(">",as.character(fData(gates)[Index,1]),sep="")
+    seq = as.character(fData(gates)[Index,10])
+    sprintf("%s\n%s",otuid,seq)
   })
 
-  output$cluster_sequences<-renderText({
+  output$clusterSequences<-renderText({
       if(input$level == 'genus'){
         inputFeature=input$genus
       } else if (input$level == 'species'){
@@ -195,7 +197,10 @@ shinyServer(function(input, output) {
         inputFeature=input$phylum
       }
     k = which(fData(gates)[,input$level]==inputFeature)
-    paste(as.character(fData(gates)[k,10]),collapse="\n\n")
+    otuids = paste(sprintf(">%s",fData(gates)[k,1]),"\n",sep="")
+    head(otuids)
+    seqs = as.character(fData(gates)[k,10])
+    paste(otuids,seqs,collapse="\n")
   })
 
   output$otulist<- renderDataTable({

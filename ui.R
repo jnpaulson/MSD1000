@@ -1,19 +1,20 @@
-download_not_installed<-function(x){    
+downloadNotInstalled<-function(x){
     for(i in x){
-        if(!require(i,character.only=TRUE)){
-         install.packages(i,repos="http://cran.r-project.org")
-         library(i,character.only=TRUE)
-        }       
-    }   
+      if(!require(i,character.only=TRUE)){
+        install.packages(i,repos="http://cran.r-project.org")
+        library(i,character.only=TRUE)
+      }
+    }
 }
-required_packages = c("shiny","vegan")
-download_not_installed(required_packages)
+requiredPackages = c("shiny","vegan")
+downloadNotInstalled(requiredPackages)
 
 if(!require("metagenomeSeq")){
-        source("http://bioconductor.org/biocLite.R")
-        biocLite("metagenomeSeq")
-        library("metagenomeSeq")
+  source("http://bioconductor.org/biocLite.R")
+  biocLite("metagenomeSeq")
+  library("metagenomeSeq")
 }
+
 
 load("forserveroptim.rdata")
 
@@ -80,10 +81,10 @@ shinyUI(navbarPage("MSD 1000",
             plotOutput("plot"),
             conditionalPanel(condition = "input.level == 'OTU'",
               tableOutput("table"),
-              pre("OTU sequence center:",textOutput("cluster_sequence"))
+              pre("OTU sequence center:",textOutput("clusterSequence"))
             ),
             conditionalPanel(condition = "input.level != 'OTU'",
-              pre("*OTU sequence centers:",textOutput("cluster_sequences"))
+              pre("*OTU sequence centers:",textOutput("clusterSequences"))
             )
           )
       )
