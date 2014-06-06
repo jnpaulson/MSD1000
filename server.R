@@ -198,9 +198,8 @@ shinyServer(function(input, output) {
       }
     k = which(fData(gates)[,input$level]==inputFeature)
     otuids = paste(sprintf(">%s",fData(gates)[k,1]),"\n",sep="")
-    head(otuids)
     seqs = as.character(fData(gates)[k,10])
-    paste(otuids,seqs,collapse="\n")
+    paste(otuids,seqs,collapse="\n",sep="")
   })
 
   output$otulist<- renderDataTable({
