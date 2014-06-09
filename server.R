@@ -203,19 +203,26 @@ shinyServer(function(input, output) {
   })
 
   output$plotRare<-renderPlot({
-    cl = interaction(pData(gates)[,input$rare])
-    if("Dysentery"%in%input$rare){ cl = factor(cl)}
-
+    if(is.null(input$rare)){
+      cl = "black"
+    } else {
+      cl = interaction(pData(gates)[,input$rare])
+      if("Dysentery"%in%input$rare){ cl = factor(cl)}
+    }
     plot(totalCounts, numFeatures, xlab = "Depth of coverage", 
             ylab = "Number of detected features",col='grey',bg=cl,pch=21)
-    legend("topleft",legend=levels(cl),fill=factor(levels(cl)),box.col="NA")
-    ar2 = paste("Adj. R^2: ",round(summary(lm(numFeatures~totalCounts-1+cl))$adj,digits=3))
-    legend("bottomright", legend=ar2,box.col=NA)
-    tmp = lapply(levels(cl), function(lv) lm(numFeatures~totalCounts-1, subset=cl==lv))
-    for(i in 1:length(levels(cl))){
-        abline(tmp[[i]], col=i)
-    }
 
+    if(!is.null(input$rare)){
+      legend("topleft",legend=levels(cl),fill=factor(levels(cl)),box.col="NA")
+      tmp = lapply(levels(cl), function(lv) lm(numFeatures~totalCounts-1, subset=cl==lv))
+      for(i in 1:length(levels(cl))){
+          abline(tmp[[i]], col=i)
+      }
+      ar2 = paste("Adj. R^2: ",round(summary(lm(numFeatures~totalCounts-1+cl))$adj,digits=3))
+    } else {
+      ar2 = paste("Adj. R^2: ",round(summary(lm(numFeatures~totalCounts-1))$adj,digits=3))
+    }
+      legend("bottomright", legend=ar2,box.col=NA)    
   })
 
   output$otulist<- renderDataTable({
