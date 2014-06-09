@@ -43,14 +43,14 @@ shinyUI(navbarPage("MSD 1000",
 	tabPanel("Feature Abundance plots",
         sidebarLayout(
           sidebarPanel(
-            radioButtons("level","Level",c(
+            radioButtons("level","Level:",c(
                         "Phylum" = "phylum",
                         "Class" = "class",
                         "Genus" = "genus","Species"="species","OTU"="OTU"),
                         selected = c("OTU")),
               conditionalPanel(condition = "input.level == 'OTU'",
                 numericInput('feature', 'OTU:', 1, min = 1, max = 197358,value=3712),
-                checkboxInput("otu","Index",TRUE)
+                checkboxInput("otu","Index:",TRUE)
               ),
               conditionalPanel(condition = "input.level == 'species'",
                 selectInput('species', 'Bacteria:', rownames(sraw))
@@ -65,15 +65,15 @@ shinyUI(navbarPage("MSD 1000",
                 selectInput('phylum', 'Bacteria:', rownames(praw))
               ),                            
             br(),
-            checkboxInput("norm", "normalized data", TRUE),
+            checkboxInput("norm", "Normalize:", TRUE),
             br(),
             br(),
-            checkboxGroupInput("country","Include country:",c(
+            checkboxGroupInput("country","Country:",c(
                         "Kenya" = "Kenya",
                         "The Gambia" = "Gambia",
                         "Mali" = "Mali","Bangladesh"="Bangladesh"),
                         selected = c("Kenya","Gambia","Mali","Bangladesh")),
-            checkboxGroupInput("age","Include age:",c(
+            checkboxGroupInput("age","Age:",c(
                         "[0,6)" = "[0,6)",
                         "[6,12)" = "[6,12)",
                         "[12,18)" = "[12,18)","[18,24)"="[18,24)","[24,60)"="[24,60)"),

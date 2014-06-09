@@ -113,7 +113,7 @@ shinyServer(function(input, output) {
       
     mypar(dim1,dim2)
     plotFeature(mat,otuIndex = inputFeature,ylab="Abundance",main=main,
-      classIndex = clIndex,col=coll,font.lab=2,font.axis=2)
+      classIndex = clIndex,col=coll,font.lab=2,font.axis=2,sort=FALSE)
     legend("topleft",legend=unique(coll),fill=unique(coll),box.col="NA")
   })
 
