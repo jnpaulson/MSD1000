@@ -131,10 +131,17 @@ shinyUI(navbarPage("MSD 1000",
     tabPanel("Diversity",
       sidebarLayout(sidebarPanel(
         checkboxGroupInput("comp",
-            "Comparisons",c("Country"="Country","Age" = "AgeFactor","Health"="Type","Dysentery"="Dysentery"),selected=c("Type"))
+            "Comparisons:",c("Country"="Country","Age" = "AgeFactor","Health"="Type","Dysentery"="Dysentery"),selected=c("Type"))
         ),
       mainPanel(plotOutput("diversity"),tableOutput("diversityTable"))))
     ,
+    tabPanel("Rarefaction",
+      sidebarLayout(sidebarPanel(
+        checkboxGroupInput("rare",
+            "Comparisons:",c("Country"="Country","Age" = "AgeFactor","Health"="Type","Dysentery"="Dysentery"),selected=c("Type"))
+        ),
+      mainPanel(plotOutput("plotRare"))))
+    ,    
     navbarMenu("More",
       tabPanel("OTU descriptions",
             mainPanel(
