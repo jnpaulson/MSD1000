@@ -110,9 +110,9 @@ shinyServer(function(input, output) {
       }
       main   = os[inputFeature]
     }
-      
+    ylabel = ifelse(input$norm,yes="Abundance log2(cpt)",no="No. raw reads")
     mypar(dim1,dim2)
-    plotFeature(mat,otuIndex = inputFeature,ylab="Abundance",main=main,
+    plotFeature(mat,otuIndex = inputFeature,ylab=ylabel,main=main,
       classIndex = clIndex,col=coll,font.lab=2,font.axis=2,sort=FALSE)
     legend("topleft",legend=unique(coll),fill=unique(coll),box.col="NA")
   })

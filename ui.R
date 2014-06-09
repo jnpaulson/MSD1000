@@ -49,8 +49,8 @@ shinyUI(navbarPage("MSD 1000",
                         "Genus" = "genus","Species"="species","OTU"="OTU"),
                         selected = c("OTU")),
               conditionalPanel(condition = "input.level == 'OTU'",
-                numericInput('feature', 'OTU:', 1, min = 1, max = 197358,value=3712),
-                checkboxInput("otu","Index:",TRUE)
+                checkboxInput("otu","Index",TRUE),
+                numericInput('feature', 'OTU:', 1, min = 1, max = 197358,value=3712)
               ),
               conditionalPanel(condition = "input.level == 'species'",
                 selectInput('species', 'Bacteria:', rownames(sraw))
@@ -63,10 +63,8 @@ shinyUI(navbarPage("MSD 1000",
               ),
               conditionalPanel(condition = "input.level == 'phylum'",
                 selectInput('phylum', 'Bacteria:', rownames(praw))
-              ),                            
-            br(),
-            checkboxInput("norm", "Normalize:", TRUE),
-            br(),
+              ),
+            checkboxInput("norm", "Normalize", TRUE),
             br(),
             checkboxGroupInput("country","Country:",c(
                         "Kenya" = "Kenya",
