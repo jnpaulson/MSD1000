@@ -43,7 +43,7 @@ shinyUI(navbarPage("MSD 1000",
 	tabPanel("Feature Abundance plots",
         sidebarLayout(
           sidebarPanel(
-            radioButtons("level","Level:",c(
+            selectInput("level","Level:",c(
                         "Phylum" = "phylum",
                         "Class" = "class",
                         "Genus" = "genus","Species"="species","OTU"="OTU"),
