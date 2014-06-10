@@ -197,6 +197,9 @@ shinyServer(function(input, output) {
         inputFeature=input$phylum
       }
     k = which(fData(gates)[,input$level]==inputFeature)
+    if(inputFeature=="no_match"){
+      k = which(is.na(fData(gates)[,3]))
+    }
     otuids = paste(sprintf(">%s",fData(gates)[k,1]),"\n",sep="")
     seqs = as.character(fData(gates)[k,10])
     paste(otuids,seqs,collapse="\n",sep="")
