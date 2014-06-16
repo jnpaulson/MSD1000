@@ -41,6 +41,7 @@ shinyUI(navbarPage("MSD 1000",
   header = headerInfo,
   footer = footerInfo,
 	tabPanel("Feature Abundance plots",
+    tags$h6("Manhattan plots of feature abundances where each bar represents the abundance in a sample."),
         sidebarLayout(
           sidebarPanel(
             selectInput("level","Level:",c(
@@ -101,6 +102,7 @@ shinyUI(navbarPage("MSD 1000",
       )
     ),
   tabPanel("PCA",
+    tags$h6("PCA or MDS on the 200 most variable features."),
         sidebarLayout(
           sidebarPanel(
             radioButtons("pcaSamples","Samples to use:",c("Both"="Both","Cases"="Case","Controls"="Control")),
@@ -110,7 +112,7 @@ shinyUI(navbarPage("MSD 1000",
                 selectInput("distance", "Distance:", 
                     choices=c("euclidean","manhattan","canberra","bray",
                       "kulczynski","jaccard","gower","altGower","morisita",
-                      "horn","mountford","raup","binomial","chao","cao"))
+                      "horn","raup","binomial","chao","cao"))
               ),
             radioButtons("pcaColor","Colored by:",c(
                         "Country" = "Country",
@@ -118,6 +120,10 @@ shinyUI(navbarPage("MSD 1000",
                         "Health" = "Type",
                         "Dysentery"="Dysentery"),
                         selected = c("Country")),
+            numericInput('dimensionx', 'X-axis dimension:', 2,
+                 min = 1, max = 4),
+            numericInput('dimensiony', 'Y-axis dimension:', 1,
+                 min = 1, max = 4),
             br(),
             tags$small("Warning: takes a few seconds")
           ),
@@ -127,6 +133,7 @@ shinyUI(navbarPage("MSD 1000",
       )
     ),
     tabPanel("Diversity",
+      tags$h6("Boxplots of Shannon diversity indexes. Both cases and controls exhibited higher mean Shannon diversity index scores at higher age groups compared to lower age groups. The diversity of healthy samples is higher than diseased samples"),
       sidebarLayout(sidebarPanel(
         checkboxGroupInput("comp",
             "Comparisons:",c("Country"="Country","Age" = "AgeFactor","Health"="Type","Dysentery"="Dysentery"),selected=c("Type"))
@@ -134,6 +141,7 @@ shinyUI(navbarPage("MSD 1000",
       mainPanel(plotOutput("diversity"),tableOutput("diversityTable"))))
     ,
     tabPanel("Rarefaction",
+      tags$h6("The linear effect depth of coverage has on the number of features detected. Including each of the three factors in a linear model, the adjusted R^2 is 0.912"),
       sidebarLayout(sidebarPanel(
         checkboxGroupInput("rare",
             "Comparisons:",c("Country"="Country","Age" = "AgeFactor","Health"="Type","Dysentery"="Dysentery"),selected=c("Type"))

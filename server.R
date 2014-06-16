@@ -23,7 +23,7 @@ mypar<-function(a=1,b=1,brewer.n=8,brewer.name="Dark2",...){
 
 load("forserveroptim.rdata")
 
-status = factor(pData(gates)$Type)
+status = factor(pData(gates)$Type,levels=c("Control","Case"))
 country = factor(pData(gates)$Country)
 agefactor = factor(pData(gates)$AgeFactor)
 os = paste(fData(gates)[,1],fData(gates)[,"species"],sep=":")
@@ -94,7 +94,7 @@ shinyServer(function(input, output) {
           mat = praw
         }
       }
-      main   = rownames(mat)[inputFeature]
+      main   = inputFeature
     } else {
       if(input$norm == TRUE){
         mat = nmat[,samplesToInclude]
@@ -131,13 +131,14 @@ shinyServer(function(input, output) {
     if(input$pcaColor=="Type" | input$pcaColor=="Dysentery") pd = factor(pd)
     # if(input$pcaOrMds=="FALSE") useDist = TRUE
     plotOrd(nmat[,samplesToInclude],n=200,pch=21,bg=pd,usePCA=input$pcaOrMds,
+      comp=c(input$dimensiony,input$dimensionx),
       useDist=useDist,distfun=vegan::vegdist,dist.method=input$distance)
     legend("bottomleft",levels(pd),fill=factor(levels(pd)),box.col="NA")
   })
 
   output$diversity <- renderPlot({
     pd = pData(gates)[,input$comp]
-    boxplot(H~interaction(pd))
+    boxplot(H~interaction(pd),ylab="Shannon diversity index")
   })
 
   output$diversityTable <- renderTable({
