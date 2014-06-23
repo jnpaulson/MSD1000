@@ -67,12 +67,12 @@ shinyUI(navbarPage("MSD 1000",
               ),
             checkboxInput("norm", "Normalize", TRUE),
             br(),
-            checkboxGroupInput("country","Country:",c(
+            checkboxGroupInput("country","Include country:",c(
                         "Kenya" = "Kenya",
                         "The Gambia" = "Gambia",
                         "Mali" = "Mali","Bangladesh"="Bangladesh"),
                         selected = c("Kenya","Gambia","Mali","Bangladesh")),
-            checkboxGroupInput("age","Age:",c(
+            checkboxGroupInput("age","Include age (months):",c(
                         "[0,6)" = "[0,6)",
                         "[6,12)" = "[6,12)",
                         "[12,18)" = "[12,18)","[18,24)"="[18,24)","[24,60)"="[24,60)"),
@@ -136,7 +136,7 @@ shinyUI(navbarPage("MSD 1000",
       tags$h6("Boxplots of Shannon diversity indexes. Both cases and controls exhibited higher mean Shannon diversity index scores at higher age groups compared to lower age groups. The diversity of healthy samples is higher than diseased samples"),
       sidebarLayout(sidebarPanel(
         checkboxGroupInput("comp",
-            "Comparisons:",c("Country"="Country","Age" = "AgeFactor","Health"="Type","Dysentery"="Dysentery"),selected=c("Type"))
+            "Comparisons:",c("Country"="Country","Age (months)" = "AgeFactor","Health"="Type","Dysentery"="Dysentery"),selected=c("Type"))
         ),
       mainPanel(plotOutput("diversity"),tableOutput("diversityTable"))))
     ,

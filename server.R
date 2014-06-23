@@ -131,7 +131,7 @@ shinyServer(function(input, output) {
     if(input$pcaColor=="Type" | input$pcaColor=="Dysentery") pd = factor(pd)
     # if(input$pcaOrMds=="FALSE") useDist = TRUE
     plotOrd(nmat[,samplesToInclude],n=200,pch=21,bg=pd,usePCA=input$pcaOrMds,
-      comp=c(input$dimensiony,input$dimensionx),
+      comp=c(input$dimensionx,input$dimensiony),
       useDist=useDist,distfun=vegan::vegdist,dist.method=input$distance)
     legend("bottomleft",levels(pd),fill=factor(levels(pd)),box.col="NA")
   })
