@@ -31,30 +31,41 @@ googleAnalytics <- function(account="UA-51743143-1"){
 load("forserveroptim.rdata")
 
 headerInfo = tags$h3("Hosted by:",tags$a(tags$img(src="logo.png"),href="http://epiviz.cbcb.umd.edu"),
-                p(),tags$h6("Data comes from the ",
+                p(),tags$h4("Data comes from the ",
                   tags$a("molecular characterization of the diarrheal microbiome in young children from low-income countries",
                     href="http://www.cbcb.umd.edu/research/projects/GEMS-pathogen-discovery")))
 footerInfo = tags$small(tags$a("Visualization code",href="https://github.com/nosson/MSD1000"))
-#," by ",tags$a("Joseph N. Paulson",href="http://www.cbcb.umd.edu/~jpaulson")),
 
 shinyUI(navbarPage("MSD 1000",
-  header = headerInfo,
-  footer = footerInfo,
-	tabPanel("Feature Abundance plots",
-    tags$h6("Manhattan plots of feature abundances where each bar represents the abundance in a sample."),
+  # header = headerInfo,
+  # footer = footerInfo,
+  tabPanel("About",tags$h3("Interactive visualization explorer of the diarrheal microbiome in young children from low-income countries"),p("Diarrhea is a major cause of mortality and morbidity in young children from developing countries, leading to as many as 15% of all deaths in children under 5 years of age."),
+    p("Among the discoveries of our study are the effectiveness of quantitative PCR as an alternative to culture in characterizing Shigella infections, as well as the potential of members of the Streptococcus genus to cause diarrhea. The data underlying our study is presented in part through these interactive plots."),
+  tags$hr(),tags$h3("Explore the data!"),p("We welcome you to explore the data on this site through the tabs above. Data was filtered (for server speed) at each level to include only bacteria present in over 20 samples. Additionally, only OTU sequences present in over 20 samples are shown."),
+  tags$h5("Bacterial Abundance"),p("Abundance of bacteria at various levels of the tree stratified by sample health status, age, and country of origin. Scroll through your favorite bacteria and display your country/age of interest."),
+  tags$h5("Heatmap"),p("Heatmap of the bacterial abundances filtered by either the most variable bacteria or those with the largest median absolute deviation scores.",strong("warning: takes a few seconds")),
+  tags$h5("PCA/MDS"),p("PCA or MDS plots of the samples",strong("warning: takes a few seconds")),
+  tags$h5("Diversity"),p("Shannon diversity index boxplots of the various stratified samples."),
+  tags$h5("Rarefaction"),p("Operational taxonomic unit (OTU) richness as a function of sequencing depth."),
+  tags$h5("OTU Description"),p("OTU representative sequence annotations."),
+  tags$hr(),headerInfo,
+  tags$small(tags$a("Visualization code",href="https://github.com/nosson/MSD1000")," by ",tags$a("Joseph N. Paulson",href="http://www.cbcb.umd.edu/~jpaulson"))),
+
+	tabPanel("Bacterial Abundance",
+    tags$h6("Manhattan plots of bacterial abundances where each bar represents the abundance in a sample."),
         sidebarLayout(
           sidebarPanel(
             selectInput("level","Level:",c(
                         "Phylum" = "phylum",
                         "Class" = "class",
                         "Genus" = "genus","Species"="species","OTU"="OTU"),
-                        selected = c("OTU")),
+                        selected = c("species")),
               conditionalPanel(condition = "input.level == 'OTU'",
                 checkboxInput("otu","Index",TRUE),
                 numericInput('feature', 'OTU:', 1, min = 1, max = 197358,value=3712)
               ),
               conditionalPanel(condition = "input.level == 'species'",
-                selectInput('species', 'Bacteria:', rownames(sraw))
+                selectInput('species', 'Bacteria:', rownames(sraw),selected="Streptococcus mitis")
               ),
               conditionalPanel(condition = "input.level == 'genus'",
                 selectInput('genus', 'Bacteria:', rownames(graw))
@@ -101,28 +112,42 @@ shinyUI(navbarPage("MSD 1000",
           )
       )
     ),
-  tabPanel("PCA",
-    tags$h6("PCA or MDS on the 200 most variable features."),
+  tabPanel("Heatmap",
+      tags$h6("Heatmap of the top N bacteria."),
+      sidebarLayout(sidebarPanel(
+        radioButtons("heatSamples","Samples to use:",c("Both"="Both","Cases"="Case","Controls"="Control"),selected="Control"),
+        radioButtons("heat","Choose bacteria by:",c("Median Absolute Deviation"="mad","Variability"="sd")),
+        numericInput('heatNumber', 'Number of bacteria to display:', 15,
+                 min = 5, max = 400),
+        radioButtons("heatColumns",
+            "Column labels:",c("Health"="Type","Country"="Country","Age" = "AgeFactor","Dysentery"="Dysentery"),selected="AgeFactor"),
+        br(),
+        tags$small("Warning: takes a few seconds")
+        ),
+      mainPanel(plotOutput("plotHeatmap",height="800px"))))
+    ,
+  tabPanel("PCA / MDS",
+    tags$h6("PCA or MDS on the 200 most variable bacteria."),
         sidebarLayout(
           sidebarPanel(
             radioButtons("pcaSamples","Samples to use:",c("Both"="Both","Cases"="Case","Controls"="Control")),
-            radioButtons("pcaOrMds","PCA or MDS:",c("PCA"="TRUE","MDS"="FALSE")),
-            radioButtons("useDist","Count distances:",c("False"="FALSE","True"="TRUE")),
+            radioButtons("pcaOrMds","PCA or MDS:",c("PCA"="TRUE","MDS"="FALSE"),selected="FALSE"),
+            radioButtons("useDist","Count distances:",c("False"="FALSE","True"="TRUE"),selected="TRUE"),
               conditionalPanel(condition = "input.useDist == 'TRUE'",
                 selectInput("distance", "Distance:", 
                     choices=c("euclidean","manhattan","canberra","bray",
                       "kulczynski","jaccard","gower","altGower","morisita",
-                      "horn","raup","binomial","chao","cao"))
+                      "horn","raup","binomial","chao","cao"),selected="raup")
               ),
             radioButtons("pcaColor","Colored by:",c(
                         "Country" = "Country",
                         "Age" = "AgeFactor",
                         "Health" = "Type",
                         "Dysentery"="Dysentery"),
-                        selected = c("Country")),
-            numericInput('dimensionx', 'X-axis dimension:', 2,
+                        selected = c("Type")),
+            numericInput('dimensionx', 'X-axis dimension:', 1,
                  min = 1, max = 4),
-            numericInput('dimensiony', 'Y-axis dimension:', 1,
+            numericInput('dimensiony', 'Y-axis dimension:', 2,
                  min = 1, max = 4),
             br(),
             tags$small("Warning: takes a few seconds")
@@ -141,40 +166,14 @@ shinyUI(navbarPage("MSD 1000",
       mainPanel(plotOutput("diversity",height="500px"),tableOutput("diversityTable"))))
     ,
     tabPanel("Rarefaction",
-      tags$h6("The linear effect depth of coverage has on the number of features detected. Including each of the three factors in a linear model, the adjusted R^2 is 0.912"),
+      tags$h6("The linear effect depth of coverage has on the number of bacteria detected. Including each of the three factors in a linear model, the adjusted R^2 is 0.912"),
       sidebarLayout(sidebarPanel(
         checkboxGroupInput("rare",
             "Comparisons:",c("Country"="Country","Age" = "AgeFactor","Health"="Type","Dysentery"="Dysentery"),selected=c("Type"))
         ),
-      mainPanel(plotOutput("plotRare",height="600px",width="600px"))))
-    ,
-    tabPanel("Heatmap",
-      tags$h6("Heatmap of the top N features"),
-      sidebarLayout(sidebarPanel(
-        radioButtons("heatSamples","Samples to use:",c("Both"="Both","Cases"="Case","Controls"="Control"),selected="Control"),
-        radioButtons("heat","Choose features by:",c("Median Absolute Deviation"="mad","Variability"="sd")),
-        numericInput('heatNumber', 'Number of features to display:', 15,
-                 min = 5, max = 400),
-        radioButtons("heatColumns",
-            "Column labels:",c("Health"="Type","Country"="Country","Age" = "AgeFactor","Dysentery"="Dysentery"),selected="AgeFactor"),
-        br(),
-        tags$small("Warning: takes a few seconds")
-        ),
-      mainPanel(plotOutput("plotHeatmap",height="800px"))))
-    ,        
-    navbarMenu("More",
-      tabPanel("OTU descriptions",
-            mainPanel(
-                dataTableOutput("otulist")
-             )
-          ),
-      tabPanel("About",
-        tags$h6(
-    "Diarrhea is a major cause of mortality and morbidity in young children from developing countries, leading to as many as 15% of all deaths in children under 5 years of age. While many causes of this disease are already known, conventional diagnostic approaches fail to detect a pathogen in up to 60% of diarrheal cases. Our study is part of the larger Global Enterics Multi-center study (GEMS) and aims to characterize the diarrheal microbiome in order to both evaluate the effectiveness of modern diagnostics based on molecular techniques, and to discover potentially new pathogens.",p(),
-    "Among the discoveries of our study are the effectiveness of quantitative PCR as an alternative to culture in characterizing Shigella infections, as well as the potential of members of the Streptococcus genus to cause diarrhea. Streptococci were found in our study to be statistically associated with diarrheal disease in general and more severe forms (such as dysentery) in particular.",p(),
-    "Data was filtered (for server speed) at each level to include only features present in over 20 samples. Additionally, only OTU sequences present in over 20 samples are shown."
-),p(),tags$small(tags$a("Visualization code",href="https://github.com/nosson/MSD1000")," by ",tags$a("Joseph N. Paulson",href="http://www.cbcb.umd.edu/~jpaulson")),p(),p()
+      mainPanel(plotOutput("plotRare",height="600px",width="600px")))),
+    tabPanel("OTU Descriptions",
+            mainPanel(dataTableOutput("otulist"))
           )
-         )
 	)
 )
