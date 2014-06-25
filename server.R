@@ -231,16 +231,25 @@ shinyServer(function(input, output) {
   })
 
   output$plotHeatmap<-renderPlot({
-    trials = factor(pData(gates)[,input$heatColumns])
+    if(input$heatSamples!="Both"){
+      samplesToInclude = which(status%in%input$heatSamples)
+      subset = nmat[,samplesToInclude]
+      gatesSubset = gates[,samplesToInclude]
+    } else {
+      samplesToInclude = 1:ncol(nmat)
+      subset = nmat
+      gatesSubset = gates[,samplesToInclude]
+    }
+    trials = factor(pData(gatesSubset)[,input$heatColumns])
     heatmapColColors=brewer.pal(12,"Set3")[as.integer(trials)];
     heatmapCols = colorRampPalette(brewer.pal(9, "RdBu"))(50)
-    rownames(nmat) = paste(fData(gates)[,"species"],fData(gates)[,"OTU"],sep=":")
-    plotMRheatmap2(nmat,n=input$heatNumber,fun=input$heat,
+    rownames(subset) = paste(fData(gatesSubset)[,"species"],fData(gatesSubset)[,"OTU"],sep=":")
+    plotMRheatmap2(subset,n=input$heatNumber,fun=input$heat,
               cexRow = 0.25,cexCol=0.4,trace="none",
               dendrogram="column", key=TRUE,
               lwid=c(1,4), lhei=c(1,4),
               margins=c(2,2),
-                  col = heatmapCols,ColSideColors = heatmapColColors)
+              col = heatmapCols,ColSideColors = heatmapColColors)
     legend("left",fill=unique(heatmapColColors),legend=levels(trials))
 
   })
