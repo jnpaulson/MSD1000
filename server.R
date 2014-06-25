@@ -22,6 +22,7 @@ mypar<-function(a=1,b=1,brewer.n=8,brewer.name="Dark2",...){
 }
 
 load("forserveroptim.rdata")
+source("plotMRheatmap2.R")
 
 status = factor(pData(gates)$Type,levels=c("Control","Case"))
 country = factor(pData(gates)$Country)
@@ -229,6 +230,20 @@ shinyServer(function(input, output) {
       legend("bottomright", legend=ar2,box.col=NA)    
   })
 
+  output$plotHeatmap<-renderPlot({
+    trials = factor(pData(gates)[,input$heatColumns])
+    heatmapColColors=brewer.pal(12,"Set3")[as.integer(trials)];
+    heatmapCols = colorRampPalette(brewer.pal(9, "RdBu"))(50)
+    rownames(nmat) = paste(fData(gates)[,"species"],fData(gates)[,"OTU"],sep=":")
+    plotMRheatmap2(nmat,n=input$heatNumber,fun=input$heat,
+              cexRow = 0.25,cexCol=0.4,trace="none",
+              dendrogram="column", key=TRUE,
+              lwid=c(1,4), lhei=c(1,4),
+              margins=c(2,2),
+                  col = heatmapCols,ColSideColors = heatmapColColors)
+    legend("left",fill=unique(heatmapColColors),legend=levels(trials))
+
+  })
   output$otulist<- renderDataTable({
         as.matrix(fData(gates)[,-c(2,3)])
   })

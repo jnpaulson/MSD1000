@@ -147,7 +147,20 @@ shinyUI(navbarPage("MSD 1000",
             "Comparisons:",c("Country"="Country","Age" = "AgeFactor","Health"="Type","Dysentery"="Dysentery"),selected=c("Type"))
         ),
       mainPanel(plotOutput("plotRare"))))
-    ,    
+    ,
+    tabPanel("Heatmap",
+      tags$h6("Heatmap of the top N features"),
+      sidebarLayout(sidebarPanel(
+        radioButtons("heat","Choose features by:",c("Median Absolute Deviation"="mad","Variability"="sd")),
+        numericInput('heatNumber', 'Number of features to display:', 25,
+                 min = 5, max = 400),
+        radioButtons("heatColumns",
+            "Column labels:",c("Health"="Type","Country"="Country","Age" = "AgeFactor","Dysentery"="Dysentery")),
+        br(),
+        tags$small("Warning: takes a few seconds")
+        ),
+      mainPanel(plotOutput("plotHeatmap",height="800px"))))
+    ,        
     navbarMenu("More",
       tabPanel("OTU descriptions",
             mainPanel(
