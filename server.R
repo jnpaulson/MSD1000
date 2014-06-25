@@ -234,7 +234,7 @@ shinyServer(function(input, output) {
     if(is.null(input$rare)){
       cl = "black"
     } else {
-      cl = pData(gates)[,input$rare]
+      cl = fixLabels(pData(gates)[,input$rare])
       if("Country"%in%colnames(cl)){
         cl2 = cl[,"Country"]
         cl2 = fixLabels(cl2)
