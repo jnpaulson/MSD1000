@@ -128,7 +128,7 @@ shinyUI(navbarPage("MSD 1000",
             tags$small("Warning: takes a few seconds")
           ),
           mainPanel(
-            plotOutput("pcaPlot")
+            plotOutput("pcaPlot",height="650px")
           )
       )
     ),
@@ -138,7 +138,7 @@ shinyUI(navbarPage("MSD 1000",
         checkboxGroupInput("comp",
             "Comparisons:",c("Country"="Country","Age (months)" = "AgeFactor","Health"="Type","Dysentery"="Dysentery"),selected=c("Type"))
         ),
-      mainPanel(plotOutput("diversity"),tableOutput("diversityTable"))))
+      mainPanel(plotOutput("diversity",height="500px"),tableOutput("diversityTable"))))
     ,
     tabPanel("Rarefaction",
       tags$h6("The linear effect depth of coverage has on the number of features detected. Including each of the three factors in a linear model, the adjusted R^2 is 0.912"),
@@ -146,7 +146,7 @@ shinyUI(navbarPage("MSD 1000",
         checkboxGroupInput("rare",
             "Comparisons:",c("Country"="Country","Age" = "AgeFactor","Health"="Type","Dysentery"="Dysentery"),selected=c("Type"))
         ),
-      mainPanel(plotOutput("plotRare"))))
+      mainPanel(plotOutput("plotRare",height="600px",width="600px"))))
     ,
     tabPanel("Heatmap",
       tags$h6("Heatmap of the top N features"),

@@ -141,7 +141,7 @@ shinyServer(function(input, output) {
       subset = gates
     }
     useDist = input$useDist
-    pd = fixLabels(pData(subset)[,input$pcaColor])
+    pd = factor(fixLabels(pData(subset)[,input$pcaColor]))
     # if(input$pcaOrMds=="FALSE") useDist = TRUE
     plotOrd(nmat[,samplesToInclude],n=200,pch=21,bg=pd,usePCA=input$pcaOrMds,
       comp=c(input$dimensionx,input$dimensiony),
