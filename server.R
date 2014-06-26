@@ -24,21 +24,9 @@ mypar<-function(a=1,b=1,brewer.n=8,brewer.name="Dark2",...){
 load("forserveroptim.rdata")
 source("plotMRheatmap2.R")
 
-fixLabels = function(x){
-  if("Gambia"%in%x){
-    x = as.character(x)
-    x[x=="Gambia"] = "The Gambia"
-    x = factor(x)
-    return(x)
-  } else {
-    return(x)
-  }
-}
-
-status = factor(pData(gates)$Type,levels=c("Control","Case"))
+status  = factor(pData(gates)$Type,levels=c("Case","Control"))
 country = pData(gates)$Country
-country = fixLabels(country)
-agefactor = factor(pData(gates)$AgeFactor)
+agefactor = pData(gates)$AgeFactor
 os = paste(fData(gates)[,1],fData(gates)[,"species"],sep=":")
 
 shinyServer(function(input, output) {
@@ -76,7 +64,6 @@ shinyServer(function(input, output) {
     } else{
       coll = pData(subset)[,"Type"]
     }
-    coll = fixLabels(coll)
 
     if(input$level!="OTU"){
       if(input$level == 'genus'){
@@ -124,10 +111,10 @@ shinyServer(function(input, output) {
       }
       main   = os[inputFeature]
     }
-    ylabel = ifelse(input$norm,yes="Abundance log2(cpt)",no="No. raw reads")
+    ylabel = ifelse(input$norm,yes=expression(bold("Log"[2]*" Abundance")),no="No. raw reads")
     mypar(dim1,dim2)
     plotFeature(mat,otuIndex = inputFeature,ylab=ylabel,main=main,
-      classIndex = clIndex,col=coll,font.lab=2,font.axis=2,sort=FALSE)
+      classIndex = clIndex,col=coll,font.lab=2,font.axis=1,sort=FALSE,xaxt="n")
     legend("topleft",legend=unique(coll),fill=unique(coll),box.col="NA")
   })
 
@@ -141,32 +128,29 @@ shinyServer(function(input, output) {
       subset = gates
     }
     useDist = input$useDist
-    pd = factor(fixLabels(pData(subset)[,input$pcaColor]))
+    pd = factor(pData(subset)[,input$pcaColor])
     # if(input$pcaOrMds=="FALSE") useDist = TRUE
     plotOrd(nmat[,samplesToInclude],n=200,pch=21,bg=pd,usePCA=input$pcaOrMds,
       comp=c(input$dimensionx,input$dimensiony),
       useDist=useDist,distfun=vegan::vegdist,dist.method=input$distance)
-    legend("bottomleft",levels(pd),fill=factor(levels(pd)),box.col="NA")
+    legend("topleft",levels(pd),fill=factor(levels(pd)),box.col="NA")
   })
 
   output$diversity <- renderPlot({
-    pd = fixLabels(pData(gates)[,input$comp])
-    if("Country"%in%colnames(pd)){
-      pd2 = pd[,"Country"]
-      pd2 = fixLabels(pd2)
-      pd[,"Country"] = pd2
+    pd = pData(gates)[,input$comp]
+    if(dim(as.matrix(pd))[2]>1){
+      cl = factor(levels(unlist(pd[,1,drop=FALSE])))
+    } else {
+      cl = factor(levels(pd))
     }
-    boxplot(H~interaction(pd),ylab="Shannon diversity index")
+    pd = interaction(pd)
+    mypar(1,1)
+    boxplot(H~pd,ylab="Shannon diversity index",col=cl)
+    legend("topleft",fill=unique(cl),legend=unique(cl))
   })
 
   output$diversityTable <- renderTable({
-    pd = fixLabels(pData(gates)[,input$comp])
-    if("Country"%in%colnames(pd)){
-      pd2 = pd[,"Country"]
-      pd2 = fixLabels(pd2)
-      pd[,"Country"] = pd2
-    }    
-    pd = interaction(pd)
+    pd = interaction(pData(gates)[,input$comp])
     nc = length(unique(pd))
 
     muH =as.vector(by(H,pd,mean))
@@ -234,13 +218,7 @@ shinyServer(function(input, output) {
     if(is.null(input$rare)){
       cl = "black"
     } else {
-      cl = fixLabels(pData(gates)[,input$rare])
-      if("Country"%in%colnames(cl)){
-        cl2 = cl[,"Country"]
-        cl2 = fixLabels(cl2)
-        cl[,"Country"] = cl2
-      }
-      cl = interaction(cl)
+      cl = interaction(pData(gates)[,input$rare])
       if("Dysentery"%in%input$rare){ cl = factor(cl)}
     }
     plot(totalCounts, numFeatures, xlab = "Depth of coverage", 
@@ -269,17 +247,18 @@ shinyServer(function(input, output) {
       subset = nmat
       gatesSubset = gates[,samplesToInclude]
     }
-    trials = fixLabels(pData(gatesSubset)[,input$heatColumns])
+    trials = pData(gatesSubset)[,input$heatColumns]
     heatmapColColors=brewer.pal(12,"Set3")[as.integer(trials)];
     heatmapCols = colorRampPalette(brewer.pal(9, "RdBu"))(50)
     rownames(subset) = paste(fData(gatesSubset)[,"species"],fData(gatesSubset)[,"OTU"],sep=":")
     plotMRheatmap2(subset,n=input$heatNumber,fun=input$heat,
+              main="Bacterial Abundance Heatmap",
               cexRow = 0.25,cexCol=0.4,trace="none",
               dendrogram="column", key=TRUE,
               lwid=c(1,4), lhei=c(1,4),
               margins=c(2,2),
               col = heatmapCols,ColSideColors = heatmapColColors)
-    legend("left",fill=unique(heatmapColColors),legend=levels(trials))
+    legend("left",fill=unique(heatmapColColors),legend=levels(trials),title="Column labels")
 
   })
   output$otulist<- renderDataTable({
