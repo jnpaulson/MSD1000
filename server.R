@@ -250,10 +250,10 @@ shinyServer(function(input, output) {
     trials = pData(gatesSubset)[,input$heatColumns]
     heatmapColColors=brewer.pal(12,"Set3")[as.integer(trials)];
     heatmapCols = colorRampPalette(brewer.pal(9, "RdBu"))(50)
-    rownames(subset) = paste(fData(gatesSubset)[,"species"],fData(gatesSubset)[,"OTU"],sep=":")
+    rownames(subset) = paste(fData(gatesSubset)[,"genus"],fData(gatesSubset)[,"OTU"],sep=":")
     plotMRheatmap2(subset,n=input$heatNumber,fun=input$heat,
               main="Bacterial Abundance Heatmap",
-              cexRow=.75,cexCol=0.4,trace="none",
+              cexRow=.95,cexCol=0.4,trace="none",
               dendrogram="column", key=TRUE,
               lwid=c(1,4), lhei=c(1,4),
               margins=c(2,10),

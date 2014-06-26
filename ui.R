@@ -103,10 +103,10 @@ shinyUI(navbarPage("MSD 1000",
             plotOutput("plot"),
             conditionalPanel(condition = "input.level == 'OTU'",
               tableOutput("table"),
-              pre("OTU ID and sequence center:",textOutput("clusterSequence"))
+              pre("OTU ID and sequence center for OTU above:",textOutput("clusterSequence"))
             ),
             conditionalPanel(condition = "input.level != 'OTU'",
-              pre("OTU ID and sequence centers:",textOutput("clusterSequences"))
+              pre("OTU ID and sequence centers for bacteria above:",textOutput("clusterSequences"))
             ),
             googleAnalytics()
           )
