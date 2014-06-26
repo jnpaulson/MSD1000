@@ -253,10 +253,10 @@ shinyServer(function(input, output) {
     rownames(subset) = paste(fData(gatesSubset)[,"species"],fData(gatesSubset)[,"OTU"],sep=":")
     plotMRheatmap2(subset,n=input$heatNumber,fun=input$heat,
               main="Bacterial Abundance Heatmap",
-              cexRow = 0.25,cexCol=0.4,trace="none",
+              cexRow=.75,cexCol=0.4,trace="none",
               dendrogram="column", key=TRUE,
               lwid=c(1,4), lhei=c(1,4),
-              margins=c(2,2),
+              margins=c(2,10),
               col = heatmapCols,ColSideColors = heatmapColColors)
     legend("left",fill=unique(heatmapColColors),legend=levels(trials),title="Column labels")
 
