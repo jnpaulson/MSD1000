@@ -130,15 +130,15 @@ shinyUI(navbarPage("MSD 1000",
     tags$h6("PCA or MDS to project samples, using the 200 most variable bacteria, onto 2 dimensions."),
         sidebarLayout(
           sidebarPanel(
-            radioButtons("pcaSamples","Samples to use:",c("Both"="Both","Cases"="Case","Controls"="Control")),
             radioButtons("pcaOrMds","PCA or MDS:",c("PCA"="TRUE","MDS"="FALSE"),selected="FALSE"),
-            radioButtons("useDist","Count distances:",c("False"="FALSE","True"="TRUE"),selected="TRUE"),
+            radioButtons("useDist","Make use of count distances:",c("False"="FALSE","True"="TRUE"),selected="TRUE"),
               conditionalPanel(condition = "input.useDist == 'TRUE'",
                 selectInput("distance", "Distance:", 
                     choices=c("euclidean","manhattan","canberra","bray",
                       "kulczynski","jaccard","gower","altGower","morisita",
                       "horn","raup","binomial","chao","cao"),selected="raup")
               ),
+            radioButtons("pcaSamples","Samples to include:",c("Both"="Both","Cases"="Case","Controls"="Control")),
             radioButtons("pcaColor","Colored by:",c(
                         "Country" = "Country",
                         "Age (months)" = "AgeFactor",
