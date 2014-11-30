@@ -6,7 +6,7 @@ downloadNotInstalled<-function(x){
   	}
     }
 }
-requiredPackages = c("shiny","vegan")
+requiredPackages = c("shiny","vegan","ggplot2","gplots")
 downloadNotInstalled(requiredPackages)
 
 if(!require("metagenomeSeq")){
@@ -22,7 +22,7 @@ mypar<-function(a=1,b=1,brewer.n=8,brewer.name="Dark2",...){
 }
 
 load("forserveroptim.rdata")
-source("plotMRheatmap2.R")
+source("./plotMRheatmap2.R")
 
 status  = factor(pData(gates)$Type,levels=c("Case","Control"))
 country = pData(gates)$Country

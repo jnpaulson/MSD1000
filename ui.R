@@ -6,7 +6,7 @@ downloadNotInstalled<-function(x){
       }
     }
 }
-requiredPackages = c("shiny","vegan")
+requiredPackages = c("shiny","vegan","ggplot2","gplots")
 downloadNotInstalled(requiredPackages)
 
 if(!require("metagenomeSeq")){
@@ -29,7 +29,7 @@ googleAnalytics <- function(account="UA-51743143-1"){
 }
 
 load("forserveroptim.rdata")
-
+source("./plotMRheatmap2.R")
 headerInfo = tags$h3("Hosted by:",tags$a(tags$img(src="logo.png"),href="http://epiviz.cbcb.umd.edu"),
                 p(),tags$h4("Data comes from the ",
                   tags$a("molecular characterization of the diarrheal microbiome in young children from low-income countries",
