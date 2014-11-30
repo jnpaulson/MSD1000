@@ -96,6 +96,7 @@ shinyServer(function(input, output) {
         }
       }
       main   = inputFeature
+      mat = mat[,samplesToInclude]
     } else {
       if(input$norm == TRUE){
         mat = nmat[,samplesToInclude]
